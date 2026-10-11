@@ -1,0 +1,40 @@
+{
+  "model_type": "aria_linear_head",
+  "model_version": "v0.1-pre",
+  "status": "pre-release; test evaluation pending",
+  "architecture": {
+    "head": "single affine linear regression",
+    "input_raw_dim": 398,
+    "input_layout": "[14 acoustic | 192 embedding mean | 192 embedding std]",
+    "feature_definition": "F2 = 14 acoustic + 192 embedding mean + 14 binary availability indicators",
+    "input_model_dim": 220,
+    "output": "normalized PVQD CAPE-V severity z-score; invert with harmonization parameters",
+    "folded": true,
+    "selected_model": "Ridge",
+    "ridge_alpha": 100.0
+  },
+  "training_data": {
+    "corpus": "PVQD",
+    "selection": "clean-only exact-provenance rows",
+    "clean_rows": 236,
+    "train_rows": 200,
+    "dev_rows": 36,
+    "split": "speaker-grouped",
+    "seed": 7,
+    "test_used": false,
+    "test_labels_in_package": false,
+    "source_bundle_sha256": "4689ea1ffa5130568100baf352e9b64a5eb4ddf1e55f19c46a49a959b09af2de"
+  },
+  "preprocessing": {
+    "sentinel_policy": "core_v1",
+    "imputation": "train-only median on trusted acoustic values",
+    "availability_indicators": "14 unscaled indicators appended after standardized F2; 1=available and task-trusted",
+    "harmonization": "PVQD CAPE-V train-only mean/sd; inverse transform in weights/harmonization.json"
+  },
+  "evaluation": {
+    "dev_spearman": 0.7422282432240754,
+    "dev_mae_mm": 10.97657309220328,
+    "dev_n": 36,
+    "test_status": "pending"
+  }
+}
