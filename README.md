@@ -1,7 +1,16 @@
+---
+license: other
+model_type: aria_linear_head
+# Test evaluation is intentionally pending for v0.1-pre.
+---
+
 # Aria v0.1-pre
 
-本目录是可直接运行的本地 Hugging Face 模型包草案。它只含推理代码、JSON 权重和配置；不含训练代码、测试标签、legacy bundle 或 `.npz` 数据。**Test evaluation pending.**
+本目录是可直接运行的本地 Hugging Face 模型包草案。
 
+> ⚠️ **Test evaluation pending.** §2.5 尚未运行；当前只有 dev 结果。
+
+Dev：Spearman **0.7422**，MAE **10.98 mm**（n=36，speaker-grouped，seed=7）。完整方法、局限和已知部署问题见 [model_card.md](model_card.md)。
 ## Quickstart
 
 依赖只有 Python 3.10+ 和 NumPy：
