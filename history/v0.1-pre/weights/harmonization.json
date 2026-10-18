@@ -1,0 +1,11 @@
+{
+  "format": "per-corpus-severity-standardization-v0.1",
+  "target": "CAPE-V severity",
+  "corpus": "pvqd",
+  "native_units": "CAPE-V mm [0,100]",
+  "mean_mm": 28.783541715145113,
+  "sd_mm": 24.688642698993515,
+  "forward": "z = (severity_mm - mean_mm) / sd_mm",
+  "inverse": "severity_mm = z * sd_mm + mean_mm",
+  "fit": "train-only"
+}

@@ -1,0 +1,58 @@
+{
+  "format": "acoustic-missingness-v0.1",
+  "policy": "core_v1",
+  "n_features": 14,
+  "feature_names": [
+    "hnr_db",
+    "cpps_db",
+    "jitter_local",
+    "jitter_rap",
+    "jitter_ppq5",
+    "shimmer_local",
+    "shimmer_apq3",
+    "shimmer_apq5",
+    "f0_median",
+    "f0_iqr",
+    "f0_cv",
+    "voiced_fraction",
+    "intensity_median",
+    "intensity_iqr"
+  ],
+  "sentinels": [
+    {
+      "name": "hnr_minus_200",
+      "condition": "hnr_db == -200.0",
+      "unavailable_columns": [
+        0
+      ]
+    },
+    {
+      "name": "f0_median_zero",
+      "condition": "f0_median == 0.0",
+      "unavailable_columns": [
+        8,
+        9,
+        10
+      ]
+    }
+  ],
+  "other_zeros": "preserved, including f0_iqr/f0_cv zeros when f0_median is nonzero",
+  "medians": [
+    8.862548351287842,
+    109.06462097167969,
+    0.016606695018708706,
+    0.00712539185769856,
+    0.007517246995121241,
+    0.055708978325128555,
+    0.020222927443683147,
+    0.0278535271063447,
+    181.4980697631836,
+    27.667190551757812,
+    0.20013164728879929,
+    0.5444210469722748,
+    61.349077224731445,
+    31.021611213684082
+  ],
+  "indicator_definition": "14 unscaled binary availability indicators appended after [acoustic14 | embedding_mean192]; 1=available and task-trusted",
+  "fit": "train-only observed task-trusted acoustic values"
+}

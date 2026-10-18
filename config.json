@@ -1,0 +1,143 @@
+{
+  "model_type": "aria_linear_head",
+  "model_version": "v0.2.3.3",
+  "status": "formal cold-start release; G3 PASS under revision R1; T_diag uncalibrated (pending ruling); §2.5 locked benchmark run 2026-10-18, not significant vs. the v1 frozen CAPE-V severity head",
+  "contract": {
+    "input": "segment A: 16 kHz mono waveform, or a raw recording (stage 0 is bundled)",
+    "output": "abi_prime [0,10], y_hat_mm = 10 * abi_prime (PVQD CAPE-V overall severity, mm), s [0,100]",
+    "validated_input": "PVQD protocol compound recordings (sustained /a/, /i/ + six CAPE-V sentences), whole file through stage 0",
+    "out_of_scope": "any-recording vowel cutting; the front end that locates and cuts a sustained vowel does not exist yet",
+    "health_to_severity_mapping": "none; abi_prime is CAPE-V severity / 10 directly"
+  },
+  "pipeline": {
+    "chain": "stage 0 segment A -> native 9 features -> L3 linear head -> clip [0,10] (G6 identity) -> g table -> S",
+    "seg_ver": "stage0-v0.2.1.2",
+    "feature_engine": "native",
+    "head": "single affine linear regression (refit L3, lambda = 100)",
+    "feature_names": [
+      "cpps",
+      "jitter_local",
+      "gne_max",
+      "hfno6000",
+      "hnrd",
+      "h1h2",
+      "shimmer_local_db",
+      "shimmer_local",
+      "psd"
+    ],
+    "abi_prime_clip": [
+      0.0,
+      10.0
+    ],
+    "g_ver": 3,
+    "g_space": "ABI_prime_corr [0,10] -> S [0,100]",
+    "g6_correction_active": false
+  },
+  "package_layout": {
+    "weights/model.json": "L3 coefficients, clip, g version, cold-start thresholds, dev metrics, package identity",
+    "weights/g_table.json": "dimension chain g constant table (knots / p / sigma) with its acceptance record",
+    "inference/predict.py": "entry point: --audio | --segment-a | --requests",
+    "inference/stage0/": "stage 0, seg_ver stage0-v0.2.1.2 (13 modules, byte-identical to the frozen prediction run)",
+    "inference/native_features/": "native nine-feature engine (5 modules, byte-identical to the frozen prediction run)",
+    "history/v0.1-pre/": "archived v0.1-pre package (card, weights, entry point)"
+  },
+  "dependencies": {
+    "python": ">=3.10",
+    "core": [
+      "numpy",
+      "scipy",
+      "soundfile",
+      "onnxruntime"
+    ],
+    "segment_a_only_path_needs": [
+      "numpy",
+      "scipy"
+    ],
+    "vad_model": {
+      "name": "SileroVAD.onnx (Silero v5)",
+      "sha256": "1a153a22f4509e292a94e67d6f9b85e8deb25b4988682b7e174c65279d8788e3",
+      "bundled": false,
+      "resolution": "--vad-model PATH, $ARIA_VAD_MODEL, or inference/models/SileroVAD.onnx"
+    }
+  },
+  "training_data": {
+    "corpus": "PVQD",
+    "fit_pool_rows": 212,
+    "holdout_rows": 12,
+    "category_distribution_fit_pool": {
+      "normal": 84,
+      "mild": 79,
+      "moderate": 31,
+      "severe": 18
+    },
+    "label": "PVQD CAPE-V overall severity average / 10",
+    "caliber": "relaxed / training (R1 and W_窗数 not excluded)",
+    "locked_60_used_in_fit": false,
+    "test_labels_in_package": false,
+    "source_repo": "aria-training"
+  },
+  "evaluation": {
+    "dev": {
+      "holdout_n": 12,
+      "holdout_rs": 0.8881118881118882,
+      "holdout_rs_L0": 0.8951048951048951,
+      "holdout_mae_abi": 1.254975337236816,
+      "cv_mean_rs": 0.64148287217087,
+      "cv_rs_range": 0.20672451853288648,
+      "g3_refit_gate": "PASS under revision R1 (tau = 0.369)",
+      "g3_refit_gate_original": "FAIL (CV range > 0.10; not-worse-than-L0 -0.007)"
+    },
+    "locked_benchmark": {
+      "run": "§2.5, 2026-10-18, one-shot",
+      "comparator": "v1 frozen CAPE-V severity head (native mm, not recomputed)",
+      "paired_n": 57,
+      "primary_endpoint_median_d_mm": 0.693,
+      "primary_endpoint_ci95_mm": [
+        -2.408,
+        3.012
+      ],
+      "wilcoxon_one_sided_p": 0.790005,
+      "sign_test_one_sided_p": 0.395683,
+      "verdict": "not significant; do not claim v0.2.3.3 beats the v1 severity head on the locked set",
+      "aria_rs": 0.7164,
+      "aria_rs_ci95": [
+        0.5338,
+        0.8429
+      ],
+      "aria_mae_mm": 11.971,
+      "aria_mae_ci95_mm": [
+        9.553,
+        14.482
+      ],
+      "v1_rs": 0.813,
+      "v1_mae_mm": 10.951,
+      "strata_descriptive": "Normal/Mild comparable; Moderate/Severe descriptively weaker for v0.2.3.3",
+      "disclosures": {
+        "intent_to_screen": "60 allocated -> 58 scored -> 2 VAD rejections (PT084, PT134)",
+        "rejected_in_package_caliber": "PT097 rejected:R2|R5 (no prediction produced)",
+        "product_caliber": "22 scored / 36 rejected:R1, descriptive only, not part of any endpoint"
+      },
+      "frozen_predictions_sha256": "3ff22e6a55b13673b17d7d02ba5ac564ca777de96e927186172991508b144d69",
+      "generation_manifest_sha256": "08655d7bdf733f2d6ea138008f7ce10076e55017de60582058a2da2fe6002c38",
+      "report": "aria-training/docs/v0233-locked-benchmark-result.md"
+    }
+  },
+  "release_selfcheck": {
+    "what": "re-ran the 58 locked recordings through this package's own entry point and compared against the frozen prediction file",
+    "predictions_csv_sha256": "3ff22e6a55b13673b17d7d02ba5ac564ca777de96e927186172991508b144d69",
+    "byte_identical_to_frozen": true,
+    "max_abs_diff_abi_prime": 0.0,
+    "tolerance": 1e-06,
+    "status_rows_matching": "58/58 (57 scored / 1 rejected:R2|R5)",
+    "modules_verified_against_generation_manifest": "18/18 (13 stage 0 + 5 native) byte-identical",
+    "report": "aria-training/artifacts/release-selfcheck-v0.2.3.3/selfcheck_report.md"
+  },
+  "cold_start_thresholds": {
+    "T_diag_L0": 3.44,
+    "S_diag": 99.87,
+    "T_red_cold": 90.0,
+    "T_yellow_cold": 75.0,
+    "status": "UNCALIBRATED placeholder (T_diag from the L0 spec does not carry over to the severity label); the package therefore emits measurements only, no product band decision"
+  },
+  "supersedes": "v0.2.3.2 (draft, praat-script, archived in aria-training); v0.2.0.1 (breathiness label, archived in aria-training); v0.1-pre (this repo, archived under history/v0.1-pre/)"
+}

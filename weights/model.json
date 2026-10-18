@@ -1,0 +1,149 @@
+{
+  "model_ver": "v0.2.3.3",
+  "refit_level": "L3",
+  "g_ver": 3,
+  "feature_engine": "native",
+  "feature_engine_source": "training/native_features/abi_native.py (numpy/scipy port of abi_praat.py PART 2; no Praat dependency)",
+  "label": "cape_v_severity",
+  "seg_ver": "stage0-v0.2.1.2",
+  "feature_names": [
+    "cpps",
+    "jitter_local",
+    "gne_max",
+    "hfno6000",
+    "hnrd",
+    "h1h2",
+    "shimmer_local_db",
+    "shimmer_local",
+    "psd"
+  ],
+  "abi_prime_raw": {
+    "level": "L3",
+    "coefficients": {
+      "b0": 12.47,
+      "b": [
+        -0.5062,
+        -0.3403,
+        -5.915,
+        -1.061,
+        0.06068,
+        -0.004161,
+        4.759,
+        -0.1942,
+        10.64
+      ],
+      "lambda": 100.0
+    },
+    "formula": "b0 + sum_j b_j x_j",
+    "abi_orig_coefficients": {
+      "intercept": 5.0447730915,
+      "scale": 2.9257400394,
+      "cpps": -0.172,
+      "jitter_local": -0.193,
+      "gne_max": -1.283,
+      "hfno6000": -0.396,
+      "hnrd": 0.01,
+      "h1h2": 0.017,
+      "shimmer_local_db": 1.473,
+      "shimmer_local": -0.088,
+      "psd": -68.295
+    },
+    "clip": [
+      0.0,
+      10.0
+    ]
+  },
+  "g6_correction": {
+    "active": false,
+    "weights": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "reason": "G6 finalized under product strict caliber: real_g6_status=FAIL (253 pairs: 209 train / 44 eval); corrector held bypass, identity fallback"
+  },
+  "g_table": {
+    "path": "g_table.json",
+    "sha256": "4cc7d521f6989c87b2355f49381081541860c6f60aa9e170f2393d727c8da385"
+  },
+  "cold_start_thresholds": {
+    "T_diag_L0": 3.44,
+    "S_diag": 99.87,
+    "T_red_cold": 90.0,
+    "T_yellow_cold": 75.0,
+    "T_yellow_effective_n_lt_5": 75.0,
+    "inversion_lock_active": false,
+    "reference_share_above_T_diag": 0.0
+  },
+  "dev_metrics": {
+    "target": "PVQD cape_v_severity average / 10 (ABI 0-10 scale)",
+    "caliber": "relaxed",
+    "holdout_n": 12,
+    "holdout_rs": 0.8881118881118882,
+    "holdout_mae_abi": 1.254975337236816,
+    "holdout_rs_L0": 0.8951048951048951,
+    "cv_mean_rs": 0.64148287217087,
+    "cv_rs_range": 0.20672451853288648,
+    "g3_refit_gate": {
+      "rule": "G3 revision R1 (Ryo 2026-10-18): level chosen by CV; hold-out rs >= 0.70; CV rs range <= tau, tau = P95 of the 5-fold range under a rho0 = 0.70 Fisher-z null at the per-fold speaker count",
+      "holdout_rs": 0.8881118881118882,
+      "holdout_rs_ge_0_70": true,
+      "cv_rs_range": 0.20672451853288648,
+      "n_per_fold": 42.4,
+      "tau": 0.3692486604860881,
+      "tau_params": {
+        "rho0": 0.7,
+        "quantile": 0.95,
+        "draws": 1000000,
+        "seed": 20261018
+      },
+      "cv_range_le_tau": true,
+      "holdout_vs_L0": {
+        "difference": -0.006993006993006867,
+        "bootstrap_ci95": [
+          -0.2643073593073595,
+          0.21900010353574575
+        ],
+        "bootstrap_valid_draws": 4000,
+        "status": "disclosed only; not a gate under ruling (iii)"
+      },
+      "pass": true
+    },
+    "g3_refit_gate_original": {
+      "rule": "v0.2.1 original: hold-out rs >= 0.70, hold-out rs >= L0 (strict), CV rs range <= 0.10",
+      "holdout_rs": 0.8881118881118882,
+      "holdout_rs_ge_0_70": true,
+      "not_worse_than_L0": false,
+      "cv_rs_range": 0.20672451853288648,
+      "cv_range_le_0_10": false,
+      "pass": false
+    }
+  },
+  "inputs_sha256": {
+    "m3_refit": "8bf40e7004188584c845284ca0f72ecb162de63b1131ae230a182505bcba5186",
+    "pool_requests": "d2edadb7308c324d60cb9b92d0e1b397ce69994f113a84832b04fda7385e8a20",
+    "pool_reports": "a20e9629e0944c7065b4c346d1d08a5bfc98e238c0be16af68a92b18b33ca30a",
+    "pool_abi": "6ae7987b79bae861272375d3cd6b782ed232ed87d5d38f4e3e5e0f8942e77b23"
+  },
+  "release_status": "formal cold-start release; G3 PASS under revision R1; T_diag uncalibrated (pending ruling)",
+  "label_change": {
+    "from": "cape_v_breathiness (v0.2.0.1)",
+    "to": "cape_v_severity",
+    "ruling": "Ryo 2026-10-18 item 1"
+  },
+  "engine_change": {
+    "from": "praat-script (v0.2.3.2)",
+    "to": "native",
+    "basis": "training/native_features/REPORT.md: 9/9 features r >= 0.95 (|r-1| < 1e-12), ABI L0 max |delta| 5.2e-9 over 2,352 endpoints"
+  },
+  "g3_revision": "R1 (Ryo 2026-10-18): proposal A noise-calibrated tau; ruling (iii) on not-worse-than-L0",
+  "t_diag_status": "PLACEHOLDER 3.44 from spec; S_diag and cold red line UNCALIBRATED, pending Ryo ruling",
+  "supersedes": "v0.2.3.2 (draft, archived); v0.2.0.1 (archived)"
+}
