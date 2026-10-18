@@ -2,7 +2,7 @@
 
 - model_ver **`v0.2.3.3`**（refit L3，g 版本 3）；feature_engine **native**（numpy/scipy 复刻，不依赖 Praat）；seg_ver `stage0-v0.2.1.2`。
 - 链路：阶段 0 段 A → native 9 变量 → L3 系数 → clip [0,10] → G6 恒等（ŵ = 0）→ g（[weights/g_table.json](weights/g_table.json)）→ S。常数见 [weights/model.json](weights/model.json)，4 位有效数字。
-- 取代 v0.2.3.2（草稿，praat-script）与 v0.2.0.1（breathiness 标签），两者的包存档在 `aria-training/artifacts/m4-model-package-v0.2.3.2/` 与 `aria-training/artifacts/m4-model-package/`。上一代发布包 v0.1-pre 见本仓 tag `v0.1-pre` 与 [history/v0.1-pre/](history/v0.1-pre/model_card.md)。规格修订见 `aria-training/docs/spec-revisions.md`。
+- 取代 v0.2.3.2（草稿，praat-script）与 v0.2.0.1（breathiness 标签），两者的包存档在 `aria-training/artifacts/m4-model-package-v0.2.3.2/` 与 `aria-training/artifacts/m4-model-package/`。上一代发布包 v0.1-pre 见 [history/v0.1-pre/](history/v0.1-pre/model_card.md)。规格修订见 `aria-training/docs/spec-revisions.md`。
 
 > 本卡与 `aria-training/artifacts/m4-model-package-v0.2.3.3/MODEL_CARD.md` 同源同版本。为适应本发布仓的目录布局，卡内指向训练/评估产物的链接改写为 `aria-training` 仓内路径的文字引用，并新增或改写本包专有内容（新增「本包内容」一节与「发布包自洽门」一小节，「复现」改为只列本包命令）。模型本身的数字、门结论与判定一字未改；Limitations 的条目、顺序与结论不变，仅在两条上补了本包专有说明（第 8 条：本包同时输出训练口径与产品口径两个 status；第 12 条：锁定集上未达显著）。本包不含训练与评估代码。
 
