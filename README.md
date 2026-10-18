@@ -1,5 +1,5 @@
 ---
-license: other
+license: apache-2.0
 model_type: aria_linear_head
 # §2.5 locked benchmark has run; the result (not significant vs. the v1 frozen
 # CAPE-V severity head) is in the "锁定 Benchmark 结果" section of model_card.md.
